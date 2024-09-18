@@ -1,6 +1,7 @@
-from vstools import (FieldBased, FieldBasedT, FunctionUtil,
-                     UnsupportedFieldBasedError, core, get_lowest_values,
-                     get_neutral_value, vs)
+from vstools import (
+    FieldBased, FieldBasedT, FunctionUtil, UnsupportedFieldBasedError, core, get_lowest_values,
+    get_neutral_value, vs
+)
 
 __all__: list[str] = [
     'field_inpainting',

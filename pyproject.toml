@@ -1,0 +1,6 @@
+[tool.isort]
+profile = "black"
+line_length = 96
+multi_line_output = 6
+include_trailing_comma = false
+force_grid_wrap = 0

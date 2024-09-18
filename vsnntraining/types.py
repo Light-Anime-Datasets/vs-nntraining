@@ -1,9 +1,12 @@
 from dataclasses import dataclass
 from typing import Any, Callable
 
-from lvsfunc import clip_to_npy, get_random_frame_nums, prepare_clip_for_npy
-from vstools import (CustomStrEnum, FormatsMismatchError,
-                     ResolutionsMismatchError, SPath, SPathLike, core, vs)
+from lvsfunc import clip_to_npy, get_random_frame_nums
+from vsexprtools import norm_expr
+from vstools import (
+    CustomStrEnum, FormatsMismatchError, FunctionUtil, ResolutionsMismatchError, SPath,
+    SPathLike, core, vs
+)
 
 __all__: list[str] = [
     'TrainingPair',
@@ -47,13 +50,20 @@ class TrainingPair:
         ResolutionsMismatchError.check(self, self.ground_truth, self.low_quality)
 
     def prepare(self, output_fmt: 'OutputFormat' = OutputFormat.NPY) -> None:
-        """Prepare the training set for export."""
+        """
+        Prepare the training set for export.
 
-        if output_fmt is not OutputFormat.NPY:
+        We normalize the clips to a range of 0-1 by increasing the chroma planes's pixel values by 0.5.
+        This will make it look noticeably different for us, but supposedly greatly simplifies the training process.
+        """
+
+        func = FunctionUtil(self.ground_truth, self.prepare, None, (vs.GRAY, vs.YUV), 32)
+
+        if not func.chroma_planes:
             return
 
-        self.ground_truth = prepare_clip_for_npy(self.ground_truth)
-        self.low_quality = prepare_clip_for_npy(self.low_quality)
+        self.ground_truth = norm_expr(func.work_clip, 'x 0.5 +', func.chroma_planes)
+        self.low_quality = norm_expr(func.work_clip, 'x 0.5 +', func.chroma_planes)
 
     def pick_random_frames(self, interval: int = 24) -> None:
         """Pick random frames from the training pair."""

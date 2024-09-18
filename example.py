@@ -2,7 +2,7 @@ from lvsfunc import npy_to_clip
 from vssource import source
 from vstools import set_output
 
-from vsnntraining import OutputFormat, TrainingPair, export_training_pair
+from vsnntraining import OutputFormat, TrainingPair, export_training_pair, fix_offset
 from vsnntraining.lq import field_inpainting
 
 # Import clip.
@@ -26,6 +26,10 @@ Dumping numpy arrays to bin\field_inpainting\gt...: 100%|██| 181/181 [00:01<
 # You can verify if the data was actually output correctly by reading it back in.
 lq = npy_to_clip("bin/field_inpainting/lq/")
 gt = npy_to_clip("bin/field_inpainting/gt/")
+
+# Because we normalize the clip, we have to fix the offsets.
+lq = fix_offset(lq)
+gt = fix_offset(gt)
 
 # LQ output was TFF, so we reapply that.
 lq = lq.std.SetFieldBased(2)
