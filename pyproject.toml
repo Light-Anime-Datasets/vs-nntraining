@@ -1,3 +1,24 @@
+[tool.poetry]
+name = "vs-nntraining"
+version = "0.1.0"
+description = "Helper dataset collection scripts and other junk"
+authors = ["LightArrowsEXE <Lightarrowsreboot@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+VapourSynth = ">=68"
+vsjet = ">=3.3.1"
+lvsfunc = ">=0.8.1"
+
+[tool.poetry.group.dev.dependencies]
+ruff = ">=0.6.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.isort]
 profile = "black"
 line_length = 96
