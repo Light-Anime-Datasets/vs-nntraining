@@ -165,3 +165,7 @@ cython_debug/
 # Test files
 test.py
 bin/
+
+# Datasets
+dataset/
+src/

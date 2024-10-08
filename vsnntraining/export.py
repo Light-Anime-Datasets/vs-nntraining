@@ -16,7 +16,10 @@ def export_training_pair(
 ) -> tuple[list[SPath], list[SPath]]:
 
     training_pair.prepare(output_fmt)
-    training_pair.pick_random_frames(interval)
+
+    if interval > 1:
+        training_pair.pick_random_frames(interval)
+
     training_pair.create_dirs(out_dir)
 
     if output_fmt is OutputFormat.NPY:
